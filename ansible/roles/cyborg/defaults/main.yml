@@ -9,6 +9,17 @@ cyborg_services:
     image: "{{ cyborg_api_image_full }}"
     volumes: "{{ cyborg_api_default_volumes + cyborg_api_extra_volumes }}"
     dimensions: "{{ cyborg_api_dimensions }}"
+    haproxy:
+      cyborg_api:
+        enabled: "{{ enable_cyborg }}"
+        mode: "http"
+        external: false
+        port: "{{ cyborg_api_port }}"
+      cyborg_api_external:
+        enabled: "{{ enable_cyborg }}"
+        mode: "http"
+        external: true
+        port: "{{ cyborg_api_port }}"
   cyborg-agent:
     container_name: cyborg_agent
     group: cyborg-agent
@@ -106,7 +117,7 @@ cyborg_enabled_notification_topics: "{{ cyborg_notification_topics | selectattr(
 ####################
 cyborg_ks_services:
   - name: "cyborg"
-    type: "cyborg"
+    type: "accelerator"
     description: "OpenStack Cyborg Service"
     endpoints:
       - {'interface': 'admin', 'url': '{{ cyborg_admin_endpoint }}'}
